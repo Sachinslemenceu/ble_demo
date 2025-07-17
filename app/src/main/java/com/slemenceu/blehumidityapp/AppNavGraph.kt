@@ -6,7 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.slemenceu.blehumidityapp.presentation.humidity_temp_screen.HumidityTempScreen
+import com.slemenceu.blehumidityapp.presentation.main_screen.MainScreen
 import com.slemenceu.blehumidityapp.presentation.scan_screen.ScanScreen
 import com.slemenceu.blehumidityapp.presentation.scan_screen.ScanScreenViewModel
 import com.slemenceu.blehumidityapp.presentation.start_screen.StartScreen
@@ -29,12 +29,17 @@ fun AppNavGraph() {
                 viewModel = viewModel
             )
         }
-        composable<HumidityTempScreen>{
-            HumidityTempScreen()
+        composable<MainScreen>{
+            MainScreen(
+                viewModel = viewModel
+            )
         }
         composable<ScanScreen>{
             ScanScreen(
-                viewModel = viewModel
+                viewModel = viewModel,
+                onNavigate = {
+                    navController.navigate(MainScreen)
+                }
             )
         }
     }
@@ -44,7 +49,7 @@ fun AppNavGraph() {
 object StartScreen
 
 @Serializable
-object HumidityTempScreen
+object MainScreen
 
 @Serializable
 object ScanScreen

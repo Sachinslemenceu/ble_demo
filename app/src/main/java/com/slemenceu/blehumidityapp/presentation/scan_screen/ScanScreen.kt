@@ -26,21 +26,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.slemenceu.blehumidityapp.data.models.ConnectionState
+import com.slemenceu.blehumidityapp.data.models.OTPState
 import com.slemenceu.blehumidityapp.presentation.scan_screen.composables.ScanDevice
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("MissingPermission")
 @Composable
 fun ScanScreen(
-    viewModel: ScanScreenViewModel
+    viewModel: ScanScreenViewModel,
+    onNavigate: () -> Unit
 ) {
     var showDialog  by remember{ mutableStateOf(false) }
     var otp by remember { mutableStateOf("") }
     val foundDevices = viewModel.foundDevices.collectAsState()
 
     val connectionState = viewModel.connectionState.collectAsState()
+    val otpState = viewModel.otpState.collectAsState()
+
     LaunchedEffect(connectionState.value) {
         if (connectionState.value is ConnectionState.Connected) {
             showDialog = true
+        }
+    }
+    LaunchedEffect(otpState.value) {
+        if (otpState.value is OTPState.OTPVerificationSuccessfull) {
+            onNavigate()
         }
     }
     Log.d("ScanScreenLogs","found devices ${foundDevices.value}")
@@ -96,6 +105,7 @@ fun ScanScreen(
                 Button(
                     onClick = {
                         viewModel.sendOtp(otp)
+                        showDialog = false
                     }
                 ) {
                     Text(text = "Send OTP")
@@ -104,7 +114,13 @@ fun ScanScreen(
         }
     }
     if (viewModel.isLoading.collectAsState().value){
-        CircularProgressIndicator()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            CircularProgressIndicator()
+
+        }
     }
 }
 

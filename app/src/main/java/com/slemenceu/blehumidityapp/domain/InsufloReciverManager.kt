@@ -3,6 +3,7 @@ package com.slemenceu.blehumidityapp.domain
 import android.bluetooth.BluetoothDevice
 import com.slemenceu.blehumidityapp.data.models.BondState
 import com.slemenceu.blehumidityapp.data.models.ConnectionState
+import com.slemenceu.blehumidityapp.data.models.OTPState
 import com.slemenceu.blehumidityapp.data.models.TempHumidityResult
 import com.slemenceu.blehumidityapp.data.models.Resource
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,6 +17,10 @@ interface InsufloReceiverManager {
     val devices: SharedFlow<List<BluetoothDevice>>
 
     val connectionState: StateFlow<ConnectionState>
+
+    val data: StateFlow<List<Float>>
+
+    val otpState: StateFlow<OTPState>
 
     val bondState: StateFlow<BondState>
 
@@ -31,5 +36,6 @@ interface InsufloReceiverManager {
 
     fun reconnect()
 
-    fun closeConnection()
+    fun unpair()
+
 }

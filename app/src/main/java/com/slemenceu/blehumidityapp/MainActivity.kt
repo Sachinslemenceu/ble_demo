@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        insufloReceiverManager.closeConnection()
+        insufloReceiverManager.disconnect()
 
     }
 
